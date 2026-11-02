@@ -1,5 +1,7 @@
 # Weble MCP for WordPress
 
+<p align="center"><img src=".github/readme-banner.png" alt="Weble MCP: describe a page, your agent builds it in Elementor, in your style. Works with Claude Code, Codex, Cursor, VS Code, Gemini CLI and any MCP client." width="100%"></p>
+
 [![CI](https://github.com/Bkapk/weble-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Bkapk/weble-mcp/actions/workflows/ci.yml)
 [![License: GPL v2+](https://img.shields.io/badge/license-GPL--2.0--or--later-blue.svg)](LICENSE)
 
@@ -108,25 +110,9 @@ Authentication uses WordPress Application Passwords, a core feature. Each connec
 - **Questions, ideas, and what you built:** [Discussions](https://github.com/Bkapk/weble-mcp/discussions).
 - **Security issues:** by email, see [SECURITY.md](SECURITY.md).
 
-## Development
+## Contributing
 
-- `php -d zend.assertions=1 tests/tree-test.php` checks the logic without WordPress:
-  - the Elementor tree operations
-  - the settings merge and dynamic-tag encoding
-  - the custom-code guard
-  - the color and contrast math
-  - the lint rules
-  - the preview tokens
-  - the audit redaction and size limits
-- `php build-zip.php` rebuilds the installable zip. `php build-zip.php --wporg` builds the wordpress.org version, which leaves out the GitHub updater.
-
-## Releasing
-
-1. Set the same version in three places: `Version:` and `WBMCP_VERSION` in `weble-mcp/weble-mcp.php`, and `Stable tag:` in `weble-mcp/readme.txt`. Add a CHANGELOG entry.
-2. Commit, then tag and push: `git tag v1.0.1 && git push origin main v1.0.1`.
-3. The Release workflow checks the versions match, runs the tests, builds both zips and publishes the GitHub Release. Installed sites see the update within 12 hours.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues privately: [SECURITY.md](SECURITY.md).
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to run the tests and build the plugin. Report security issues privately: [SECURITY.md](SECURITY.md).
 
 ## License
 
@@ -135,11 +121,3 @@ GPL-2.0-or-later, the license WordPress itself uses. You can use it on any site,
 The admin screen bundles React (MIT) and the Onest and Funnel Display fonts (OFL 1.1). Their notices are in [weble-mcp/THIRD-PARTY-LICENSES.txt](weble-mcp/THIRD-PARTY-LICENSES.txt).
 
 Copyright (C) 2026 Bleart Kepuska. Made by [Weble Studio](https://weble.studio). "Weble" and the Weble MCP icon are not covered by the code license, so forks should use their own name.
-
-## Admin app
-
-The admin screen is a React app in `app-src/`, built with Vite into `weble-mcp/assets/app/` (the build is committed, so the plugin runs without Node):
-
-```
-cd app-src && npm install && npm run build
-```
