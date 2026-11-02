@@ -89,6 +89,7 @@ function wbmcp_admin_state() {
         'settings' => ['custom_code' => (bool) get_option('wbmcp_custom_code'), 'house_rules' => (string) get_option('wbmcp_house_rules', ''), 'delete_data' => (bool) get_option('wbmcp_delete_data')],
         'connections' => wbmcp_admin_connections(),
         'tools' => wbmcp_admin_tools(),
+        'updates' => function_exists('wbmcp_update_status') ? wbmcp_update_status() : null, // GitHub build only
     ];
 }
 

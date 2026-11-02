@@ -11,7 +11,7 @@ if ($zip->open($out, ZipArchive::CREATE) !== true) exit("Cannot create $out\n");
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS));
 foreach ($files as $f) {
     $rel = str_replace('\\', '/', substr($f->getPathname(), strlen($src) + 1));
-    if ($wporg && $rel === 'includes/updater.php') continue;
+    if ($wporg && ($rel === 'includes/updater.php' || strpos($rel, 'assets/brand/') === 0)) continue; // wordpress.org serves its own icon and banners
     if ($wporg && $rel === 'weble-mcp.php') {
         $zip->addFromString('weble-mcp/' . $rel, preg_replace('/^ \* Update URI:.*\R/m', '', file_get_contents($f->getPathname())));
         continue;

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+- Settings has an Updates panel: installed and latest version, a Check for updates button and a one-click update link
+- The plugin icon and banner show on the Updates screen and in the update details box
+- Updates report the release's "Tested up to" version, so WordPress no longer marks them as not tested
+
 ## 1.0.1
 
 wordpress.org Plugin Check fixes. No change in behaviour.

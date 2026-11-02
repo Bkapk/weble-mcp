@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 
 const WBMCP_REPO = 'Bkapk/weble-mcp';
 
-/** The latest release as {version, package, url, notes, published}, cached for 12 hours (1 hour after a failure). */
+/** The latest release as {version, package, url, notes, published, tested, checked}, cached for 12 hours (1 hour after a failure). */
 function wbmcp_latest_release() {
     $cached = get_site_transient('wbmcp_release');
     if (is_array($cached)) return $cached['version'] ? $cached : null;
@@ -17,12 +17,17 @@ function wbmcp_latest_release() {
         'headers' => ['Accept' => 'application/vnd.github+json', 'User-Agent' => 'weble-mcp/' . WBMCP_VERSION],
     ]);
     $body = json_decode((string) wp_remote_retrieve_body($res), true);
-    $release = ['version' => ''];
+    $release = ['version' => '', 'checked' => time()];
     if (wp_remote_retrieve_response_code($res) === 200 && is_array($body) && empty($body['draft']) && empty($body['prerelease'])) {
         foreach ((array) ($body['assets'] ?? []) as $a) {
             // Only install packages GitHub serves from this repo's own releases.
             if (($a['name'] ?? '') === 'weble-mcp.zip' && strpos((string) ($a['browser_download_url'] ?? ''), 'https://github.com/' . WBMCP_REPO . '/releases/download/') === 0) {
+                // "Tested up to" comes from the release's own readme, so the Updates screen doesn't say "Not tested".
+                $readme = wp_remote_get('https://raw.githubusercontent.com/' . WBMCP_REPO . '/' . rawurlencode((string) $body['tag_name']) . '/weble-mcp/readme.txt', ['timeout' => 8]);
+                preg_match('/^Tested up to:\s*([\d.]+)/mi', (string) wp_remote_retrieve_body($readme), $m);
                 $release = [
+                    'checked' => time(),
+                    'tested' => $m[1] ?? '',
                     'version' => ltrim((string) $body['tag_name'], 'vV'),
                     'package' => (string) $a['browser_download_url'],
                     'url' => (string) $body['html_url'],
@@ -36,6 +41,42 @@ function wbmcp_latest_release() {
     return $release['version'] ? $release : null;
 }
 
+/** Icon and banners for the Updates screen and the details box. Shipped in assets/brand, which the wordpress.org build leaves out. */
+function wbmcp_brand() {
+    $u = plugins_url('assets/brand/', dirname(__DIR__) . '/weble-mcp.php');
+    return [
+        'icons' => ['svg' => $u . 'icon.svg', '1x' => $u . 'icon-128x128.png', '2x' => $u . 'icon-256x256.png'],
+        'banners' => ['low' => $u . 'banner-772x250.png', 'high' => $u . 'banner-1544x500.png'],
+    ];
+}
+
+/** For the Settings screen: installed and latest version, when GitHub was last asked, and a one-click update link. */
+function wbmcp_update_status() {
+    $r = get_site_transient('wbmcp_release');
+    $r = is_array($r) ? $r : [];
+    $file = plugin_basename(dirname(__DIR__) . '/weble-mcp.php');
+    $available = !empty($r['version']) && version_compare($r['version'], WBMCP_VERSION, '>');
+    return [
+        'current' => WBMCP_VERSION,
+        'latest' => ($r['version'] ?? '') ?: null,
+        'checked' => (int) ($r['checked'] ?? 0),
+        'notes' => $r['url'] ?? null,
+        'available' => $available,
+        'update_url' => $available && current_user_can('update_plugins') ? wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=' . rawurlencode($file)), 'upgrade-plugin_' . $file) : null,
+    ];
+}
+
+// "Check for updates" on the Settings screen: ask GitHub now, then refresh WordPress's own update list to match.
+add_action('rest_api_init', function () {
+    register_rest_route('weble-mcp/v1', '/admin/update-check', ['methods' => 'POST', 'permission_callback' => 'wbmcp_admin_can', 'callback' => function () {
+        delete_site_transient('wbmcp_release');
+        wbmcp_latest_release();
+        delete_site_transient('update_plugins');
+        wp_update_plugins();
+        return wbmcp_update_status();
+    }]);
+});
+
 // WordPress asks this filter about plugins whose Update URI host is github.com.
 add_filter('update_plugins_github.com', function ($update, $data, $file) {
     if ($file !== plugin_basename(dirname(__DIR__) . '/weble-mcp.php')) return $update;
@@ -48,7 +89,8 @@ add_filter('update_plugins_github.com', function ($update, $data, $file) {
         'package' => $r['package'],
         'requires' => $data['RequiresWP'] ?? '',
         'requires_php' => $data['RequiresPHP'] ?? '',
-    ];
+        'tested' => $r['tested'] ?? '',
+    ] + wbmcp_brand();
 }, 10, 3);
 
 // The "View details" box on the Plugins screen.
@@ -66,10 +108,12 @@ add_filter('plugins_api', function ($result, $action, $args) {
         'last_updated' => $r['published'],
         'requires' => '6.2',
         'requires_php' => '7.4',
+        'tested' => $r['tested'] ?? '',
         'sections' => [
+            'description' => '<p>' . esc_html__('Let your AI agent design straight into Elementor, in your site’s own style. Works with Claude Code, Codex, Cursor and any MCP client.', 'weble-mcp') . '</p>',
             'changelog' => '<h4>' . esc_html($r['version']) . '</h4>' . wpautop(esc_html($r['notes'])) . '<p><a href="' . esc_url($r['url']) . '">Full release notes on GitHub</a></p>',
         ],
-    ];
+    ] + wbmcp_brand();
 }, 10, 3);
 
 // A copy installed from a differently named folder (e.g. weble-mcp-main) keeps its folder, so it stays active after updating.
