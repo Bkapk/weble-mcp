@@ -28,10 +28,9 @@ jobs:
           echo "tag=$tag header=$header const=$const stable=$stable"
           [ "$tag" = "$header" ] && [ "$tag" = "$const" ] && [ "$tag" = "$stable" ]
       - run: php -d zend.assertions=1 tests/tree-test.php
-      - run: php build-zip.php && php build-zip.php --wporg
+      # Only the self-updating zip. The wordpress.org build (php build-zip.php --wporg) is made locally and goes to SVN.
+      - run: php build-zip.php
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
-          files: |
-            weble-mcp.zip
-            weble-mcp-wporg.zip
+          files: weble-mcp.zip
           generate_release_notes: true
