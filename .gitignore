@@ -1,0 +1,9 @@
+*.zip
+vendor/
+.DS_Store
+Thumbs.db
+.env*
+.idea/
+.vscode/
+app-src/node_modules/
+launch-assets/raw/

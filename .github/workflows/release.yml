@@ -1,0 +1,37 @@
+name: Release
+
+# Push a tag like v1.0.1 and this publishes the GitHub Release that every installed copy updates from.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.3'
+          extensions: zip
+          coverage: none
+      # Sites compare the tag to their installed Version header, so the two must match.
+      - name: Check versions match the tag
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          header=$(grep -oP '^ \* Version:\s*\K\S+' weble-mcp/weble-mcp.php)
+          const=$(grep -oP "WBMCP_VERSION = '\K[^']+" weble-mcp/weble-mcp.php)
+          stable=$(grep -oP '^Stable tag:\s*\K\S+' weble-mcp/readme.txt)
+          echo "tag=$tag header=$header const=$const stable=$stable"
+          [ "$tag" = "$header" ] && [ "$tag" = "$const" ] && [ "$tag" = "$stable" ]
+      - run: php -d zend.assertions=1 tests/tree-test.php
+      - run: php build-zip.php && php build-zip.php --wporg
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          files: |
+            weble-mcp.zip
+            weble-mcp-wporg.zip
+          generate_release_notes: true

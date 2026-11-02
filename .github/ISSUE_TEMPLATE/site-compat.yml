@@ -1,0 +1,29 @@
+name: Site compatibility
+description: The plugin doesn't work on a particular host, theme or plugin setup
+labels: [compatibility]
+body:
+  - type: input
+    id: host
+    attributes:
+      label: Host and server
+      placeholder: e.g. Apache shared hosting, Nginx VPS, WP Engine, local (LocalWP)
+    validations:
+      required: true
+  - type: input
+    id: stack
+    attributes:
+      label: Theme, page builder and versions
+      placeholder: Hello Elementor, Elementor 3.x, Elementor Pro 3.x, WordPress 7.1, PHP 8.3
+    validations:
+      required: true
+  - type: textarea
+    id: plugins
+    attributes:
+      label: Security, cache or SEO plugins
+  - type: textarea
+    id: error
+    attributes:
+      label: Exact error
+      description: The response the agent got, or what `/mcp` shows in Claude Code.
+    validations:
+      required: true

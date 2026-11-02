@@ -1,0 +1,15 @@
+name: Feature request
+description: Something you want the agent to be able to do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: task
+    attributes:
+      label: What do you want to ask the agent to do?
+      description: Describe the task, not the tool. For example "build a WooCommerce product page from a spec sheet".
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: What happens today
