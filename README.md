@@ -1,4 +1,4 @@
-# Weble MCP for WordPress
+# Weble MCP
 
 <p align="center"><img src=".github/readme-banner.png" alt="Weble MCP: describe a page, your agent builds it in Elementor, in your style. Works with Claude Code, Codex, Cursor, VS Code, Gemini CLI and any MCP client." width="100%"></p>
 

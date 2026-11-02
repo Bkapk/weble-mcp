@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Renamed to Weble MCP, as wordpress.org does not allow "WordPress" in plugin names. Slug, settings and connections are unchanged
+
 ## 1.0.2
 
 - Settings has an Updates panel: installed and latest version, a Check for updates button and a one-click update link

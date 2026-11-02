@@ -1,10 +1,11 @@
 <?php
 // Run: php build-zip.php           builds weble-mcp.zip for GitHub Releases (updates itself from GitHub).
-//      php build-zip.php --wporg   builds weble-mcp-wporg.zip for wordpress.org: no GitHub updater, no Update URI,
+//      php build-zip.php --wporg   builds wporg/weble-mcp.zip for wordpress.org: no GitHub updater, no Update URI,
 //                                  because wordpress.org delivers updates itself and rejects plugins that don't use it.
 $wporg = in_array('--wporg', $argv, true);
 $src = __DIR__ . '/weble-mcp';
-$out = __DIR__ . ($wporg ? '/weble-mcp-wporg.zip' : '/weble-mcp.zip');
+$out = __DIR__ . ($wporg ? '/wporg/weble-mcp.zip' : '/weble-mcp.zip');
+if ($wporg && !is_dir(dirname($out))) mkdir(dirname($out));
 @unlink($out);
 $zip = new ZipArchive();
 if ($zip->open($out, ZipArchive::CREATE) !== true) exit("Cannot create $out\n");

@@ -1,4 +1,4 @@
-Third-party software bundled in Weble MCP for WordPress
+Third-party software bundled in Weble MCP
 ========================================================
 
 Weble MCP is licensed GPL-2.0-or-later (see LICENSE in the source repository).

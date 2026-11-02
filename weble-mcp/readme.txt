@@ -1,10 +1,10 @@
-=== Weble MCP for WordPress ===
+=== Weble MCP ===
 Contributors: bkapk
 Tags: mcp, ai, elementor, claude, agents
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ Deactivating it revokes every connection password it created, so none of them ca
 The admin screen bundles React (MIT) and the Onest and Funnel Display fonts (SIL Open Font License 1.1). Full license texts are in THIRD-PARTY-LICENSES.txt.
 
 == Changelog ==
+
+= 1.0.3 =
+* Renamed to Weble MCP.
 
 = 1.0.2 =
 * Check for updates from the Settings screen.

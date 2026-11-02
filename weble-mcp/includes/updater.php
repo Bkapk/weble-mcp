@@ -99,7 +99,7 @@ add_filter('plugins_api', function ($result, $action, $args) {
     $r = wbmcp_latest_release();
     if (!$r) return $result;
     return (object) [
-        'name' => 'Weble MCP for WordPress',
+        'name' => 'Weble MCP',
         'slug' => 'weble-mcp',
         'version' => $r['version'],
         'author' => '<a href="https://weble.studio/">Weble Studio</a>',
