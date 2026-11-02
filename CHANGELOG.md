@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+
+- Fixed: Update now on the Settings screen said the link had expired
+
 ## 1.0.3
 
 - Renamed to Weble MCP, as wordpress.org does not allow "WordPress" in plugin names. Slug, settings and connections are unchanged

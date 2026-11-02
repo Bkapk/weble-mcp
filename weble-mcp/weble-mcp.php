@@ -3,7 +3,7 @@
  * Plugin Name: Weble MCP
  * Plugin URI: https://github.com/Bkapk/weble-mcp
  * Description: Let your AI agent design straight into Elementor in your site's own style: pages, templates, theme builder and the global kit. Also content, custom fields, media and menus, with linting, signed previews and a read-only site audit. Works with Claude Code, Codex, Cursor, VS Code and any MCP client. Never changes plugins, themes, users or files.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Weble Studio
@@ -22,7 +22,7 @@
 
 defined('ABSPATH') || exit;
 
-const WBMCP_VERSION = '1.0.3';
+const WBMCP_VERSION = '1.0.4';
 /** Marks the application passwords this plugin creates. They only open the MCP endpoint. */
 const WBMCP_APP_ID = '8f3c2a4e-5b1d-4c7e-9a6f-2d8b7e1c4a90';
 

@@ -62,7 +62,7 @@ function wbmcp_update_status() {
         'checked' => (int) ($r['checked'] ?? 0),
         'notes' => $r['url'] ?? null,
         'available' => $available,
-        'update_url' => $available && current_user_can('update_plugins') ? wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=' . rawurlencode($file)), 'upgrade-plugin_' . $file) : null,
+        'update_url' => $available && current_user_can('update_plugins') ? add_query_arg('_wpnonce', wp_create_nonce('upgrade-plugin_' . $file), self_admin_url('update.php?action=upgrade-plugin&plugin=' . rawurlencode($file))) : null, // not wp_nonce_url: it HTML-escapes & and this goes out as JSON
     ];
 }
 
