@@ -111,6 +111,7 @@ function wbmcp_audit_cut($v, &$budget) {
 /** Options whose name starts with $prefix, as name => value. */
 function wbmcp_audit_opts($prefix, $limit) {
     global $wpdb;
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- read-only admin audit; no API lists options by prefix
     $rows = $wpdb->get_results($wpdb->prepare("SELECT option_name, option_value FROM $wpdb->options WHERE option_name LIKE %s ORDER BY option_name LIMIT %d", $wpdb->esc_like($prefix) . '%', $limit));
     $out = [];
     foreach ((array) $rows as $r) $out[$r->option_name] = wbmcp_audit_value($r->option_value);
@@ -121,8 +122,10 @@ function wbmcp_audit_opts($prefix, $limit) {
 function wbmcp_audit_table($table, $limit, array $cols = []) {
     global $wpdb;
     $t = $wpdb->prefix . $table;
+    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- read-only admin audit of other plugins' tables
     if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($t))) !== $t) return null;
-    $rows = (array) $wpdb->get_results($wpdb->prepare("SELECT * FROM `$t` LIMIT %d", $limit), ARRAY_A);
+    $rows = (array) $wpdb->get_results($wpdb->prepare('SELECT * FROM %i LIMIT %d', $t, $limit), ARRAY_A);
+    // phpcs:enable
     return $cols ? array_map(function ($r) use ($cols) { return array_intersect_key($r, array_flip($cols)); }, $rows) : $rows;
 }
 
@@ -156,7 +159,7 @@ function wbmcp_audit_core() {
         'wordpress' => get_bloginfo('version'),
         'php' => PHP_VERSION,
         'mysql' => $wpdb->db_server_info(),
-        'server' => $_SERVER['SERVER_SOFTWARE'] ?? null,
+        'server' => isset($_SERVER['SERVER_SOFTWARE']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE'])) : null,
         'memory_limit' => ini_get('memory_limit'),
         'wp_memory_limit' => WP_MEMORY_LIMIT,
         'max_upload' => size_format(wp_max_upload_size()),
@@ -289,6 +292,7 @@ function wbmcp_audit_woocommerce($a, $limit) {
 
 function wbmcp_audit_options_index() {
     global $wpdb;
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- read-only admin audit; sizes need SQL, no user input
     $rows = $wpdb->get_results("SELECT option_name, autoload, LENGTH(option_value) AS bytes FROM $wpdb->options WHERE option_name NOT LIKE '\\_transient\\_%' AND option_name NOT LIKE '\\_site\\_transient\\_%' ORDER BY option_name");
     $groups = [];
     foreach ((array) $rows as $r) {
@@ -349,7 +353,7 @@ function wbmcp_audit_ops($a, $limit) {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     $ht = get_home_path() . '.htaccess';
     $widgets = [];
-    foreach (wp_get_sidebars_widgets() as $sidebar => $ids) {
+    foreach ((array) get_option('sidebars_widgets', []) as $sidebar => $ids) { // array_version is an int, skipped below
         if (is_array($ids)) $widgets[$sidebar] = $ids;
     }
     $updraft = [];

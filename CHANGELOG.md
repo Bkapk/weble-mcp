@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.1
+
+wordpress.org Plugin Check fixes. No change in behaviour.
+
+- Plugin table reads in the site audit pass the table name through `%i` instead of interpolating it
+- Server software in the site audit is unslashed and sanitized
+- Widget areas are read from the `sidebars_widgets` option instead of a restricted function
+- Failed uploads are cleaned up with `wp_delete_file()`
+- Uninstall code runs inside prefixed functions
+- The GSAP guidance for agents names jsDelivr instead of linking to it
+- Deliberate exceptions (read-only audit queries, the signed preview token, WPML's filter, `DONOTCACHEPAGE`) are annotated for the checker
+
 ## 1.0.0
 
 First public release.

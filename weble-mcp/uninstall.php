@@ -8,13 +8,16 @@ defined('WP_UNINSTALL_PLUGIN') || exit;
 const WBMCP_APP_ID = '8f3c2a4e-5b1d-4c7e-9a6f-2d8b7e1c4a90';
 
 // Application passwords live in user meta, which multisite shares across sites: one pass covers the network.
-foreach (get_users(['blog_id' => 0, 'fields' => 'ID', 'meta_key' => WP_Application_Passwords::USERMETA_KEY_APPLICATION_PASSWORDS]) as $uid) {
-    foreach ((array) WP_Application_Passwords::get_user_application_passwords($uid) as $item) {
-        if (($item['app_id'] ?? '') === WBMCP_APP_ID || strpos((string) ($item['name'] ?? ''), 'Claude MCP') === 0) {
-            WP_Application_Passwords::delete_application_password($uid, $item['uuid']);
+function wbmcp_uninstall_passwords() {
+    foreach (get_users(['blog_id' => 0, 'fields' => 'ID', 'meta_key' => WP_Application_Passwords::USERMETA_KEY_APPLICATION_PASSWORDS]) as $uid) {
+        foreach ((array) WP_Application_Passwords::get_user_application_passwords($uid) as $item) {
+            if (($item['app_id'] ?? '') === WBMCP_APP_ID || strpos((string) ($item['name'] ?? ''), 'Claude MCP') === 0) {
+                WP_Application_Passwords::delete_application_password($uid, $item['uuid']);
+            }
         }
     }
 }
+wbmcp_uninstall_passwords();
 delete_site_transient('wbmcp_release');
 
 function wbmcp_uninstall_site() {
@@ -23,12 +26,15 @@ function wbmcp_uninstall_site() {
     delete_post_meta_by_key('_wbmcp_snapshots');
 }
 
-if (is_multisite()) {
+function wbmcp_uninstall_sites() {
+    if (!is_multisite()) {
+        wbmcp_uninstall_site();
+        return;
+    }
     foreach (get_sites(['fields' => 'ids', 'number' => 0]) as $blog) {
         switch_to_blog($blog);
         wbmcp_uninstall_site();
         restore_current_blog();
     }
-} else {
-    wbmcp_uninstall_site();
 }
+wbmcp_uninstall_sites();

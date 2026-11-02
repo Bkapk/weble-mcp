@@ -343,7 +343,7 @@ wbmcp_tool('upload_media', 'Download a file from a public URL into the Media Lib
     ]));
     remove_filter('upload_mimes', $mimes, 999);
     if (is_wp_error($id)) {
-        @unlink($tmp);
+        wp_delete_file($tmp);
         wbmcp_fail($id->get_error_message());
     }
     if (!empty($a['alt'])) update_post_meta($id, '_wp_attachment_image_alt', sanitize_text_field($a['alt']));

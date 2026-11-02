@@ -30,7 +30,7 @@ wbmcp_tool('get_preview_url', 'A link that shows a page, post or CPT item (draft
     ];
 }, ['post_id']);
 
-if (isset($_GET['wbmcp_preview']) && !is_admin()) {
+if (isset($_GET['wbmcp_preview']) && !is_admin()) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- the signed, expiring token is checked in wbmcp_preview_posts
     add_filter('posts_results', 'wbmcp_preview_posts', 10, 2);
 }
 
@@ -39,14 +39,14 @@ function wbmcp_preview_posts($posts, $q) {
     if (!$q->is_main_query()) return $posts;
     remove_filter('posts_results', 'wbmcp_preview_posts', 10);
     if (count($posts) !== 1 || !$q->is_singular() || $posts[0]->post_status === 'trash') return $posts;
-    if (!wbmcp_preview_valid(sanitize_text_field(wp_unslash($_GET['wbmcp_preview'])), $posts[0]->ID)) return $posts;
+    if (!wbmcp_preview_valid(sanitize_text_field(wp_unslash($_GET['wbmcp_preview'] ?? '')), $posts[0]->ID)) return $posts; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- HMAC token stands in for a nonce (agents have no session)
 
     if ($posts[0]->post_status !== 'publish') {
         $posts[0]->post_status = 'publish'; // in memory only, so WP_Query's status check lets it through
         add_filter('comments_open', '__return_false');
         add_filter('pings_open', '__return_false');
     }
-    if (!defined('DONOTCACHEPAGE')) define('DONOTCACHEPAGE', true); // honored by WP Rocket, LiteSpeed, W3TC, Super Cache...
+    if (!defined('DONOTCACHEPAGE')) define('DONOTCACHEPAGE', true); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- standard cache-plugin constant; honored by WP Rocket, LiteSpeed, W3TC, Super Cache...
     nocache_headers();
     header('X-Robots-Tag: noindex, nofollow');
     header('Referrer-Policy: no-referrer'); // keep the token out of third-party logs

@@ -4,7 +4,7 @@ Tags: mcp, ai, elementor, claude, agents
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,10 @@ Deactivating it revokes every connection password it created, so none of them ca
 The admin screen bundles React (MIT) and the Onest and Funnel Display fonts (SIL Open Font License 1.1). Full license texts are in THIRD-PARTY-LICENSES.txt.
 
 == Changelog ==
+
+= 1.0.1 =
+* Meets the wordpress.org Plugin Check: safer database reads, sanitized server input, core functions for file cleanup and widget lists.
+* The agent instructions no longer link to a CDN.
 
 = 1.0.0 =
 * First public release.

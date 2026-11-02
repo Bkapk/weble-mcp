@@ -73,7 +73,7 @@ function wbmcp_brief_plugins() {
     }
     if (in_array('fluentform', $active, true)) $forms[] = 'Fluent Forms [fluentform id="…"]';
     if ($forms) $o[] = '- Forms: ' . implode(' · ', $forms);
-    $langs = function_exists('pll_languages_list') ? pll_languages_list() : (defined('ICL_SITEPRESS_VERSION') ? array_keys((array) apply_filters('wpml_active_languages', null)) : []);
+    $langs = function_exists('pll_languages_list') ? pll_languages_list() : (defined('ICL_SITEPRESS_VERSION') ? array_keys((array) apply_filters('wpml_active_languages', null)) : []); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML's own filter
     if ($langs) $o[] = '- Languages: ' . implode(', ', $langs) . '. Every language has its own copy of each page: edit the right one and keep translations in step.';
     if (in_array('woocommerce', $active, true)) $o[] = '- WooCommerce: change prices, stock and product data in the Woo product editor; raw meta writes skip its lookup tables.';
     return $o;
@@ -417,7 +417,7 @@ CSS
 
 Custom code (only when Custom code is ON in the Site section)
 - Custom sections: one html widget; wrap the markup in a unique class and scope all CSS under it; use kit CSS variables and the site breakpoints; no fixed pixel widths.
-- GSAP, only when asked: one html widget at the end of the page loads gsap and ScrollTrigger from https://cdn.jsdelivr.net/npm/gsap@<exact version>/dist/ and runs the code on DOMContentLoaded. Target _css_classes you set, never element ids. Return early when window.elementorFrontend?.isEditMode() or document.body.classList.contains('wbmcp-preview'). Put the animations inside gsap.matchMedia() under (prefers-reduced-motion: no-preference). Animate with gsap.from so content is visible without JavaScript.
+- GSAP, only when asked: one html widget at the end of the page loads gsap and ScrollTrigger (pinned to an exact version) from the jsDelivr CDN and runs the code on DOMContentLoaded. Target _css_classes you set, never element ids. Return early when window.elementorFrontend?.isEditMode() or document.body.classList.contains('wbmcp-preview'). Put the animations inside gsap.matchMedia() under (prefers-reduced-motion: no-preference). Animate with gsap.from so content is visible without JavaScript.
 - Simple fades and slides: use Elementor's entrance animation (_animation, or animation on containers) instead of code.
 
 Verify every build
