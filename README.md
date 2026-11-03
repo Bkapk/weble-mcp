@@ -7,6 +7,8 @@
 
 Let your AI agent design straight into Elementor, in your site's own style.
 
+<p align="center"><img src="https://github.com/user-attachments/assets/5ee37525-d900-463f-8ca8-e9ffa9dc11d1" alt="Claude Code builds a page on a WordPress site through Weble MCP: it reads the site, shows its plan, waits for a yes, then builds the page in Elementor" width="100%"></p>
+
 Describe a page, or hand over a design, and the agent builds it as real Elementor containers and widgets you can keep editing by hand. It measures your existing pages first (spacing, type scale, colors, classes) and builds with your kit's global colors and fonts. It also handles theme-builder templates, dynamic tags, content, custom fields, media and menus.
 
 The plugin is itself an MCP server, so it works with Claude Code, Codex, Cursor, VS Code, Gemini CLI and any other MCP client. There is no Node bridge and nothing to host. It's plain PHP with no dependencies, and runs on WordPress 6.2 to 7.1 and PHP 7.4 or newer, including PHP 8.
@@ -25,6 +27,12 @@ The plugin is itself an MCP server, so it works with Claude Code, Codex, Cursor,
 **Updates.** The plugin checks this repo's GitHub Releases twice a day and offers new versions on the Plugins screen, like any other update. Switch on "Enable auto-updates" there to get them without clicking.
 
 Authentication uses WordPress Application Passwords, a core feature. Each connection has its own password. The admin page lists them with their last use, and you can revoke them under Users → Profile.
+
+## Watch it build a page
+
+https://github.com/user-attachments/assets/4be8fae8-d29b-4459-8891-4be1eadd624
+
+90 seconds, no sound: connect Claude Code for VS Code, ask for a page, approve the plan, and see the result.
 
 ## How a session works
 
