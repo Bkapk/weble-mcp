@@ -30,7 +30,7 @@ Authentication uses WordPress Application Passwords, a core feature. Each connec
 
 ## Watch it build a page
 
-https://github.com/user-attachments/assets/4be8fae8-d29b-4459-8891-4be1eadd624
+https://github.com/user-attachments/assets/28f9614f-fa3c-477a-93ce-706f0752f981
 
 90 seconds, no sound: connect Claude Code for VS Code, ask for a page, approve the plan, and see the result.
 
