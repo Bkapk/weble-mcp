@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5
+
+- Preview styles are enqueued with wp_add_inline_style
+
 ## 1.0.4
 
 - Fixed: Update now on the Settings screen said the link had expired

@@ -53,8 +53,11 @@ function wbmcp_preview_posts($posts, $q) {
     add_filter('show_admin_bar', '__return_false');
     add_filter('wp_lazy_loading_enabled', '__return_false'); // full-page screenshots don't scroll
     add_filter('body_class', function ($c) { $c[] = 'wbmcp-preview'; return $c; });
-    add_action('wp_head', function () {
-        echo "<meta name=\"robots\" content=\"noindex, nofollow\">\n<style id=\"wbmcp-preview\">.elementor-invisible{visibility:visible!important}.elementor-element.animated{animation:none!important}</style>\n";
+    add_filter('wp_robots', 'wp_robots_no_robots');
+    add_action('wp_enqueue_scripts', function () {
+        wp_register_style('wbmcp-preview', false, [], WBMCP_VERSION);
+        wp_enqueue_style('wbmcp-preview');
+        wp_add_inline_style('wbmcp-preview', '.elementor-invisible{visibility:visible!important}.elementor-element.animated{animation:none!important}');
     }, 99);
     return $posts;
 }

@@ -4,7 +4,7 @@ Tags: mcp, ai, elementor, claude, agents
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,11 +88,23 @@ The admin screen is a small React app. assets/app/app.js is built from app-src/ 
 
 Deactivating it revokes every connection password it created, so none of them can be used while the plugin is off. Deleting it keeps your house rules and settings unless you switch on "Delete plugin data when the plugin is deleted" under Weble MCP > Settings. Your pages, posts and Elementor kit are never touched.
 
+== Screenshots ==
+
+1. Generate a connection and paste one prompt into Claude Code, Codex, Cursor, VS Code, Gemini CLI or any MCP client.
+2. Overview: connections, custom code, Elementor and house rules at a glance, plus site readiness checks.
+3. Tools: every tool an agent can call, grouped, with what reads and what changes.
+4. House rules: standing design and content rules sent with every site brief.
+5. Connections: each agent has its own Application Password, revocable on its own.
+6. Settings: custom code switch, endpoint, uninstall behaviour and what is never possible.
+
 == Third-party software ==
 
 The admin screen bundles React (MIT) and the Onest and Funnel Display fonts (SIL Open Font License 1.1). Full license texts are in THIRD-PARTY-LICENSES.txt.
 
 == Changelog ==
+
+= 1.0.5 =
+* Preview styles are enqueued with wp_add_inline_style.
 
 = 1.0.4 =
 * Fixed: Update now on the Settings screen said the link had expired.
